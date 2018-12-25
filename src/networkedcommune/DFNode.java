@@ -10,19 +10,22 @@ package networkedcommune;
  * 
  * @author Yaroslav Nazarov
  */
-public class BFNode extends Node {
+public class DFNode extends Node {
     /**
      * Representation Invariant:
      * 
      */
-
+    
     @Override
-    public Status sendMessage(int adresseeID) {
-        for (Object node : neighbours) {
-            
+    Node getAdresseeNode(int adresseeID) {
+        for (Node node : neighbours) {
+            if (node.nodeID == adresseeID) {
+                System.out.println("Node-" + adresseeID + " reached!");
+            } else {
+                node.sendMessage(adresseeID);
+            }
         }
         
-    }
-    
-    
+        return ;
+    }    
 }

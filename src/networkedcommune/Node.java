@@ -28,8 +28,10 @@ public abstract class Node {
     }
     
     private static int nodeCount = 0;  // #nodes created with the constructor
-    protected final int nodeID;  // #nodes created with the constructor
-    protected Collection<Node> neighbours;  // List of the nodes connected to this
+                                       // should not be modified outside of the 
+                                       // contructor
+    public final int nodeID;  // #nodes created with the constructor
+    Collection<Node> neighbours;  // List of the nodes connected to this
     
     public Node() {
         nodeID = nodeCount++;
@@ -37,12 +39,38 @@ public abstract class Node {
     
     /**
      * Used to send messages
-     * @param adressee  Node to send the message to
+     * @param adresseeID  Node (id of) to send the message to
+     * @param message  Message to be send to the node
      * @return Status that indicates whether the message reached the node
      */
-    public abstract Status sendMessage(int adresseeID);
+    public Status sendMessage(int adresseeID, String message) {
+        System.out.println("Node-" + nodeID + " sends message to node-" 
+                           + adresseeID);
+        
+        try {
+            final Node destintion = getAdresseeNode(adresseeID);
+            destintion.receiveMessage(message);
+        } catch (IllegalArgumentException e) {
+            return Status.FAILED;
+        }
+        
+        System.out.println("Node-" + adresseeID + " reached");
+        
+        return Status.REACHED;
+    }
     
-    public int getNodeID() {
-        return nodeID;
+    /**
+     * Gets the node with that id
+     * 
+     * @param adresseeID  id of the node to find
+     * @pre the node can be reached from the sending node
+     * @return the node which has its id as adresseeID
+     */
+    abstract Node getAdresseeNode(int adresseeID) 
+        throws IllegalArgumentException;
+    
+    private void receiveMessage(String message) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+            //To change body of generated methods, choose Tools | Templates.
     }
 }
