@@ -7,12 +7,14 @@ package networkedcommune;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  *
  * @author Yaroslav Nazarov
  */
-public abstract class Node {
+public class Node {
     /**
      * Model: A node that can send messages t other node in the network.
      * 
@@ -32,9 +34,14 @@ public abstract class Node {
                                        // contructor
     public final int nodeID;  // #nodes created with the constructor
     Collection<Node> neighbours;  // List of the nodes connected to this
+    BiFunction<Node, Integer, Node> searchAlgorithm;  // How to find the 
+                                                              // node needed
     
-    public Node() {
+    public Node(Collection<Node> neighbours, 
+                BiFunction<Node, Integer, Node> searchAlgorithm) {
         nodeID = nodeCount++;
+        this.neighbours = neighbours;
+        this.searchAlgorithm = searchAlgorithm;
     }
     
     /**
@@ -48,7 +55,7 @@ public abstract class Node {
                            + adresseeID);
         
         try {
-            final Node destintion = getAdresseeNode(adresseeID);
+            final Node destintion = searchAlgorithm.apply(this, adresseeID);
             destintion.receiveMessage(message);
         } catch (IllegalArgumentException e) {
             return Status.FAILED;
@@ -58,16 +65,6 @@ public abstract class Node {
         
         return Status.REACHED;
     }
-    
-    /**
-     * Gets the node with that id
-     * 
-     * @param adresseeID  id of the node to find
-     * @pre the node can be reached from the sending node
-     * @return the node which has its id as adresseeID
-     */
-    abstract Node getAdresseeNode(int adresseeID) 
-        throws IllegalArgumentException;
     
     private void receiveMessage(String message) {
         throw new UnsupportedOperationException("Not supported yet."); 

@@ -6,26 +6,25 @@
 package networkedcommune;
 
 /**
- * Node that uses breadth-first search to find the adressee
+ * Depth-first search algorithm
  * 
  * @author Yaroslav Nazarov
  */
-public class DFNode extends Node {
-    /**
-     * Representation Invariant:
-     * 
-     */
-    
+public class DFSearchAlgorithm implements SearchAlgorithm {
     @Override
-    Node getAdresseeNode(int adresseeID) {
+    public Node searchNode(Node startingNode, int adresseeID) {
+    //Does not work! Last return is never possible in practice, ...
         for (Node node : neighbours) {
             if (node.nodeID == adresseeID) {
-                System.out.println("Node-" + adresseeID + " reached!");
+                return node;
             } else {
-                node.sendMessage(adresseeID);
+                if (node.searchNode(adresseeID) != null) {
+                    return node;
+                }
             }
         }
         
-        return ;
-    }    
+        return null;
+    } 
+    
 }
