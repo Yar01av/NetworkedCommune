@@ -32,22 +32,34 @@ public abstract class SearchAlgorithmTestCases {
     
     /** Network architectures */
     private void addChainNetwork(int length) {
+        int initLength = network.size();
+        
         for (int i = 0; i < length; i++) {
             network.add(makeNode());
         }
         
         for (int i = 1; i < length; i++) {
-            Node prev = network.get(i-1);
-            network.get(i).connect(prev);
+            Node prev = network.get(initLength+i-1);
+            network.get(initLength+i).connect(prev);
         }
     }
     
     private void addFork() {
+        int initLength = network.size();
+
         addChainNetwork(2);
         network.add(makeNode());
-        network.get(1).connect(network.get(2));
+        network.get(initLength+1).connect(network.get(initLength+2));
         network.add(makeNode());
-        network.get(1).connect(network.get(3));
+        network.get(initLength+1).connect(network.get(initLength+3));
+        
+    }
+    
+    private void addLoop(int length) {
+        int initLength = network.size();
+        
+        addChainNetwork(length);
+        network.get(network.size() - 1).connect(network.get(initLength));
         
     }
     
@@ -82,5 +94,13 @@ public abstract class SearchAlgorithmTestCases {
         
         assertEquals(algorithm.searchNode(network.get(3), 0), 
                                           network.get(0));
+    }
+    
+    @Test
+    public void testSearchNodeLoop() {
+        addLoop(3);
+        
+        assertEquals(algorithm.searchNode(network.get(0), 2), 
+                                          network.get(2));
     }
 }
