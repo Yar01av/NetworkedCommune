@@ -15,7 +15,7 @@ public class DFSearchAlgorithm implements SearchAlgorithm {
     public Node searchNode(Node startingNode, int adresseeID) {
     //Does not work! Last return is never possible in practice, ...
         for (Node node : neighbours) {
-            if (node.nodeID == adresseeID) {
+            if (node.ID == adresseeID) {
                 return node;
             } else {
                 if (node.searchNode(adresseeID) != null) {

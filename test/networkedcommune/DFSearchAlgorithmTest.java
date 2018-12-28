@@ -16,7 +16,10 @@ import static org.junit.Assert.*;
  *
  * @author Yaroslav Nazarov
  */
-public class DFSearchAlgorithmTest {
-    
+public class DFSearchAlgorithmTest extends SearchAlgorithmTestCases {
+
+    public DFSearchAlgorithmTest() {
+        algorithm = new DFSearchAlgorithm();
+    }
     
 }
