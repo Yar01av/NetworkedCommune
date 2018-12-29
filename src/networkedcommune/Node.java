@@ -5,10 +5,14 @@
  */
 package networkedcommune;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -104,5 +108,34 @@ public class Node {
     public void disconnect(Node node) {
         node.neighbours.remove(this);  // Add this to the node's neighbours
         this.neighbours.remove(node);  // And  the other way around
+    }
+    
+    public Collection<Node> getNeigbours() {
+        /**
+         * Currently unsaved but can be made safe with the code below
+         */
+//        Collection<Node> copyNeighbours = null;
+//        try {
+//            copyNeighbours = neighbours.getClass().getConstructor(neighbours.getClass()).newInstance(neighbours);
+//            
+//        } catch (NoSuchMethodException ex) {
+//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (SecurityException ex) {
+//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IllegalArgumentException ex) {
+//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (InvocationTargetException ex) {
+//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//        copyNeighbours.addAll(neighbours);
+// 
+//        return copyNeighbours;
+
+        return neighbours;
     }
 }

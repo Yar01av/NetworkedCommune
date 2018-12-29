@@ -13,15 +13,16 @@ package networkedcommune;
 public class DFSearchAlgorithm implements SearchAlgorithm {
     @Override
     public Node searchNode(Node startingNode, int adresseeID) {
-    //Does not work! Last return is never possible in practice, ...
-        for (Node node : neighbours) {
-            if (node.ID == adresseeID) {
-                return node;
-            } else {
-                if (node.searchNode(adresseeID) != null) {
+        for (Node node : startingNode.getNeigbours()) {
+            if (!node.equals(startingNode)) {
+                if (node.ID == adresseeID) {
                     return node;
+                } else {
+                    if (searchNode(node, adresseeID) != null) {
+                        return node;
+                    }
                 }
-            }
+            } 
         }
         
         return null;

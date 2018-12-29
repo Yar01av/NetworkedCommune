@@ -98,7 +98,10 @@ public abstract class SearchAlgorithmTestCases {
     
     @Test
     public void testSearchNodeLoop() {
+        //TODO (brunch out)
         addLoop(3);
+        network.add(makeNode());
+        network.get(3).connect(network.get(1));
         
         assertEquals(algorithm.searchNode(network.get(0), 2), 
                                           network.get(2));
