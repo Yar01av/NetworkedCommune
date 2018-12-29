@@ -28,10 +28,13 @@ public abstract class SearchAlgorithmTestCases {
     @Before
     public void setEmptyNetworkInstance() {
         network = new ArrayList<>();
+        Node.resetCount();
     }
     
     /** Network architectures */
     private void addChainNetwork(int length) {
+        assert length > 0;
+        
         int initLength = network.size();
         
         for (int i = 0; i < length; i++) {
@@ -66,10 +69,10 @@ public abstract class SearchAlgorithmTestCases {
     /** Tests for the searchNode method */
     @Test
     public void testSearchNodeChain() {
-        addChainNetwork(5);
+        addChainNetwork(3);
         
-        assertEquals(algorithm.searchNode(network.get(0), 4), 
-                                          network.get(4));
+        assertEquals(algorithm.searchNode(network.get(0), 2), 
+                                          network.get(2));
     }
     
     @Test
@@ -105,5 +108,14 @@ public abstract class SearchAlgorithmTestCases {
         
         assertEquals(algorithm.searchNode(network.get(0), 2), 
                                           network.get(2));
+    }
+    
+    @Test
+    public void testSearchNodeItself() {
+        //TODO (brunch out)
+        addChainNetwork(2);
+        
+        assertEquals(algorithm.searchNode(network.get(0), 0), 
+                                          network.get(0));
     }
 }

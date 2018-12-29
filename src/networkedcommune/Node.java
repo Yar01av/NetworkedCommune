@@ -5,8 +5,11 @@
  */
 package networkedcommune;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -43,13 +46,13 @@ public class Node {
     
     public Node(Collection<Node> neighbours, 
                 BiFunction<Node, Integer, Node> searchAlgorithm) {
-        this(searchAlgorithm);
+        ID = nodeCount++;
+        this.searchAlgorithm = searchAlgorithm;
         this.neighbours = neighbours;
     }
     
     public Node(BiFunction<Node, Integer, Node> searchAlgorithm) {
-        ID = nodeCount++;
-        this.searchAlgorithm = searchAlgorithm;
+        this(new ArrayList<Node>(), searchAlgorithm);
     }
     
     /**
@@ -136,6 +139,13 @@ public class Node {
 // 
 //        return copyNeighbours;
 
+        //new HashSet<Node>(neighbours);
+
         return neighbours;
+    }
+    
+    // Sets the nodeCount to 0
+    public static void resetCount() {
+        nodeCount = 0;
     }
 }
