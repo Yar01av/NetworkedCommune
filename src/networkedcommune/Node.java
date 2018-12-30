@@ -5,17 +5,9 @@
  */
 package networkedcommune;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -40,11 +32,11 @@ public class Node {
                                        // should not be modified outside of the 
                                        // contructor
     public final int ID;  // #nodes created with the constructor
-    private Collection<Node> neighbours;  // List of the nodes connected to this
+    private HashSet<Node> neighbours;  // List of the nodes connected to this
     BiFunction<Node, Integer, Node> searchAlgorithm;  // How to find the 
                                                               // node needed
     
-    public Node(Collection<Node> neighbours, 
+    public Node(HashSet<Node> neighbours, 
                 BiFunction<Node, Integer, Node> searchAlgorithm) {
         ID = nodeCount++;
         this.searchAlgorithm = searchAlgorithm;
@@ -52,7 +44,7 @@ public class Node {
     }
     
     public Node(BiFunction<Node, Integer, Node> searchAlgorithm) {
-        this(new ArrayList<Node>(), searchAlgorithm);
+        this(new HashSet<Node>(), searchAlgorithm);
     }
     
     /**
@@ -87,7 +79,7 @@ public class Node {
             //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void setNeighbours(Collection<Node> neighbours) {
+    public void setNeighbours(HashSet<Node> neighbours) {
         this.neighbours = neighbours;
     }
     
@@ -114,34 +106,7 @@ public class Node {
     }
     
     public Collection<Node> getNeigbours() {
-        /**
-         * Currently unsaved but can be made safe with the code below
-         */
-//        Collection<Node> copyNeighbours = null;
-//        try {
-//            copyNeighbours = neighbours.getClass().getConstructor(neighbours.getClass()).newInstance(neighbours);
-//            
-//        } catch (NoSuchMethodException ex) {
-//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (SecurityException ex) {
-//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (IllegalArgumentException ex) {
-//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (InvocationTargetException ex) {
-//            Logger.getLogger(Node.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        
-//        copyNeighbours.addAll(neighbours);
-// 
-//        return copyNeighbours;
-
-        //new HashSet<Node>(neighbours);
-
-        return neighbours;
+        return new HashSet<>(neighbours);  //Shallow cloning
     }
     
     // Sets the nodeCount to 0
