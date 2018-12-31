@@ -20,6 +20,7 @@ public class DFSearchAlgorithmTest extends SearchAlgorithmTestCases {
 
     public DFSearchAlgorithmTest() {
         algorithm = new DFSearchAlgorithm();
+        builder = new NetworkBuilder(Node::new, algorithm::searchNode);
     }
     
 }

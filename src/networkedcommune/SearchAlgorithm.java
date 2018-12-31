@@ -10,6 +10,7 @@ package networkedcommune;
  * 
  * @author Yaroslav Nazarov
  */
+@FunctionalInterface
 public interface SearchAlgorithm {
     /**
      * Gets the node with that id

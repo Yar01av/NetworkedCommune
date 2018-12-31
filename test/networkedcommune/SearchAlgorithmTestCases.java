@@ -19,6 +19,7 @@ import org.junit.Test;
 public abstract class SearchAlgorithmTestCases {
     List<Node> network;
     SearchAlgorithm algorithm;
+    NetworkBuilder builder;
     
     private Node makeNode() {
         return new Node(algorithm::searchNode);
@@ -32,44 +33,12 @@ public abstract class SearchAlgorithmTestCases {
     }
     
     /** Network architectures */
-    private void addChainNetwork(int length) {
-        assert length > 0;
-        
-        int initLength = network.size();
-        
-        for (int i = 0; i < length; i++) {
-            network.add(makeNode());
-        }
-        
-        for (int i = 1; i < length; i++) {
-            Node prev = network.get(initLength+i-1);
-            network.get(initLength+i).connect(prev);
-        }
-    }
-    
-    private void addFork() {
-        int initLength = network.size();
 
-        addChainNetwork(2);
-        network.add(makeNode());
-        network.get(initLength+1).connect(network.get(initLength+2));
-        network.add(makeNode());
-        network.get(initLength+1).connect(network.get(initLength+3));
-        
-    }
-    
-    private void addLoop(int length) {
-        int initLength = network.size();
-        
-        addChainNetwork(length);
-        network.get(network.size() - 1).connect(network.get(initLength));
-        
-    }
     
     /** Tests for the searchNode method */
     @Test
     public void testSearchNodeChain() {
-        addChainNetwork(3);
+        builder.addChain(network, 3);
         
         assertEquals(algorithm.searchNode(network.get(0), 2), 
                                           network.get(2));
@@ -77,7 +46,7 @@ public abstract class SearchAlgorithmTestCases {
     
     @Test
     public void testSearchNodeChainRev() {
-        addChainNetwork(5);
+        builder.addChain(network, 5);
         
         assertEquals(algorithm.searchNode(network.get(4), 0), 
                                           network.get(0));
@@ -85,7 +54,7 @@ public abstract class SearchAlgorithmTestCases {
     
     @Test
     public void testSearchNodeFork() {
-        addFork();
+        builder.addFork(network);
         
         assertEquals(algorithm.searchNode(network.get(0), 3), 
                                           network.get(3));
@@ -93,7 +62,7 @@ public abstract class SearchAlgorithmTestCases {
     
     @Test
     public void testSearchNodeForkRev() {
-        addFork();
+        builder.addFork(network);
         
         assertEquals(algorithm.searchNode(network.get(3), 0), 
                                           network.get(0));
@@ -102,7 +71,7 @@ public abstract class SearchAlgorithmTestCases {
     @Test
     public void testSearchNodeLoop() {
         //TODO (brunch out)
-        addLoop(3);
+        builder.addLoop(network, 3);
         network.add(makeNode());
         network.get(3).connect(network.get(1));
         
@@ -113,7 +82,7 @@ public abstract class SearchAlgorithmTestCases {
     @Test
     public void testSearchNodeItself() {
         //TODO (brunch out)
-        addChainNetwork(2);
+        builder.addChain(network, 2);
         
         assertEquals(algorithm.searchNode(network.get(0), 0), 
                                           network.get(0));
