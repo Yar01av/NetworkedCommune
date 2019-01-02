@@ -1,12 +1,20 @@
+package network;
+
 /*
  * TODO:
- * 1) Create network builder
- * 2) Storage of recieved messages
+ * > Storage of recieved messages
+ * > Decouple observers through exeptions
  */
-package networkedcommune;
 
+
+import utility.Resetable;
+import storage.Recorder;
+import storage.SQLRecorder;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 /**
@@ -42,6 +50,9 @@ public class Node {
     protected HashSet<Node> neighbours; // List of the nodes connected to this
     BiFunction<Node, Integer, Node> searchAlgorithm; // How to find the
     // node needed
+    final static Recorder recorder = SQLRecorder.getInstance();
+    final static Set<Resetable> resetingObservers = addResetObserver(
+                                            new HashSet<Resetable>(), recorder);
     
     public Node(HashSet<Node> neighbours, 
                 BiFunction<Node, Integer, Node> searchAlgorithm) {
@@ -77,8 +88,8 @@ public class Node {
     }
 
     protected void receiveMessage(String message) {
-        throw new UnsupportedOperationException("Not supported yet.");
-        //To change body of generated methods, choose Tools | Templates.
+        recorder.addRecord(message, this.ID);
+        //TODO
     }
 
     public void setNeighbours(HashSet<Node> neighbours) {
@@ -111,8 +122,23 @@ public class Node {
         return new HashSet<>(neighbours); //Shallow cloning
     }
     
-    // Sets the nodeCount to 0
-    public static void resetCount() {
+    /**
+     * Makes it the Node class behave as if no instances were made yet. Using 
+     * nodes made before this method was executed becomes unsafe!!!
+     */
+    public static void resetClass() {
         nodeCount = 0;
+        
+        for (Resetable observer : resetingObservers) {
+            observer.reset();
+        }
+        
+    }
+    
+    private static Set<Resetable> addResetObserver(Set<Resetable> observerCollection, Resetable observerToAdd) {
+        Set<Resetable> result = observerCollection;
+        result.add(observerToAdd);
+        
+        return result;
     }
 }

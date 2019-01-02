@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package networkedcommune;
+package network;
 
 import java.lang.reflect.Constructor;
 import java.util.HashSet;

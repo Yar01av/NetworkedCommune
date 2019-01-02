@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package networkedcommune;
+package network;
 
+import network.SearchAlgorithm;
+import network.NetworkBuilder;
+import network.Node;
 import java.util.List;
 import java.util.ArrayList;
 import static org.junit.Assert.*;
@@ -29,7 +32,7 @@ public abstract class SearchAlgorithmTestCases {
     @Before
     public void setEmptyNetworkInstance() {
         network = new ArrayList<>();
-        Node.resetCount();
+        Node.resetClass();
     }
     
     /** Network architectures */
