@@ -13,7 +13,8 @@ package utility;
  */
 public interface Resetable {
     /**
-     * Resets the instance to the state it was in just after its instantiation 
+     * Removes global impact of the instance's existence. If the instance is 
+     * still used, it would likely make the program incorrect!
      */
     public void reset();
 }

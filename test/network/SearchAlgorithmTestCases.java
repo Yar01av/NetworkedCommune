@@ -32,7 +32,7 @@ public abstract class SearchAlgorithmTestCases {
     @Before
     public void setEmptyNetworkInstance() {
         network = new ArrayList<>();
-        Node.resetClass();
+        Node.resetNodeCount();
     }
     
     /** Network architectures */

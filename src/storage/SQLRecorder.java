@@ -17,21 +17,8 @@ import java.sql.SQLException;
  * @author Yaroslav Nazarov
  */
 public class SQLRecorder extends Recorder {
-    static SQLRecorder instance = null;
 
-    private SQLRecorder() {
-        
-    }
-    
-    public static SQLRecorder getInstance() {
-        if (instance == null) {
-            instance = new SQLRecorder();
-        }
-        return instance;
-    }
-    
-    @Override
-    public void addRecord(String message, int ownerID) {
+    public SQLRecorder(int ownerID) {
         Connection conn = null;
         
         try {
@@ -54,9 +41,14 @@ public class SQLRecorder extends Recorder {
             }
         }
     }
+    
+    @Override
+    public void addRecord(String message, int ownerID) {
+        // TODO
+    }
 
     @Override
     public void reset() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); //Should delete the DBs.
     }
 }

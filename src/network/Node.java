@@ -50,13 +50,13 @@ public class Node {
     protected HashSet<Node> neighbours; // List of the nodes connected to this
     BiFunction<Node, Integer, Node> searchAlgorithm; // How to find the
     // node needed
-    final static Recorder recorder = SQLRecorder.getInstance();
-    final static Set<Resetable> resetingObservers = addResetObserver(
-                                            new HashSet<Resetable>(), recorder);
+    
+    final Recorder recorder;
     
     public Node(HashSet<Node> neighbours, 
                 BiFunction<Node, Integer, Node> searchAlgorithm) {
         ID = nodeCount++;
+        this.recorder = new SQLRecorder(ID);
         this.searchAlgorithm = searchAlgorithm;
         this.neighbours = neighbours;
     }
@@ -126,19 +126,14 @@ public class Node {
      * Makes it the Node class behave as if no instances were made yet. Using 
      * nodes made before this method was executed becomes unsafe!!!
      */
-    public static void resetClass() {
+    public static void resetNodeCount() {
         nodeCount = 0;
-        
-        for (Resetable observer : resetingObservers) {
-            observer.reset();
-        }
-        
     }
     
-    private static Set<Resetable> addResetObserver(Set<Resetable> observerCollection, Resetable observerToAdd) {
-        Set<Resetable> result = observerCollection;
-        result.add(observerToAdd);
-        
-        return result;
+    /**
+     * Resets the info stored by the node (messages etc.)
+     */
+    public static void resetInfo() {
+        Recorder.emptyInstnces();
     }
 }
