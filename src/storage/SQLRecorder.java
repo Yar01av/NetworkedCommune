@@ -7,9 +7,15 @@ package storage;
  */
 
 
+import java.io.File;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 
 /**
  * Makes records in SQL databases. One for each owner.
@@ -17,17 +23,31 @@ import java.sql.SQLException;
  * @author Yaroslav Nazarov
  */
 public class SQLRecorder extends Recorder {
+    String url;
+    int ownerID;
 
     public SQLRecorder(int ownerID) {
+        this.ownerID = ownerID;
         Connection conn = null;
         
         try {
             // db parameters
-            String url = "jdbc:sqlite:" + ownerID + ".db";
+            url = "jdbc:sqlite:" + ownerID + ".db";
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
-            System.out.println("Connection to SQLite has been established.");
+            System.out.println("Connection to SQLite has been established by ID:" 
+                                + ownerID);
+            
+            // Making the table
+            String querySetUp = "CREATE TABLE IF NOT EXISTS RecievedMessages (\n"
+            + "senderID INTEGER,"
+            + "message STRING,"
+            + "time_stamp DATETIME);";
+            
+            Statement stmt = conn.createStatement();
+            stmt.execute(querySetUp);
+            stmt.close();
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -43,12 +63,51 @@ public class SQLRecorder extends Recorder {
     }
     
     @Override
-    public void addRecord(String message, int ownerID) {
-        // TODO
+    public void addRecord(String message, int senderID) {
+        
+        
+        // TODO inser proper values
+        String queryUpdate = "INSERT INTO RecievedMessages VALUES (?, ?, ?)";
+        
+        try (Connection conn = DriverManager.getConnection(url);
+             
+             PreparedStatement pstmt = conn.prepareStatement(queryUpdate)) {
+            
+            pstmt.setDouble(1, senderID);
+            pstmt.setString(2, message);
+            pstmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+
+            
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
     public void reset() {
-        throw new UnsupportedOperationException("Not supported yet."); //Should delete the DBs.
+        (new File(url)).delete();
+    }
+
+    @Override
+    public void getAllRecords() {
+        // TODO output the records properly
+        String query = "CREATE TABLE IF NOT EXISTS RecievedMessages (\n"
+            + "sender INTEGER"
+            + "message STRING"
+            + "time_stamp DATETIME)";
+        
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(query)) {
+            
+            while (rs.next()) {
+                System.out.println(rs.getInt("senderID") +  "\t" + 
+                                   rs.getString("message") + "\t" +
+                                   rs.getString("time_stamp"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
